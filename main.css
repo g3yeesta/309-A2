@@ -7,12 +7,14 @@ body {
 {
     display: none;
 	text-align: center;
-	margin: auto;
-	width: 400px;
-	border: 1px solid;
+	margin: auto;		
   }
- 
- 
+  
+#info-bar
+{  
+	width: 398px;
+	border: 1px solid;
+  } 
   
 #start{
    border: 1px solid;
@@ -33,5 +35,11 @@ body {
 	display: table;
 	text-align: center;
 	margin: auto;
+}
+
+canvas{
+  margin: auto;
+  display: none;
+  background: #cccccc;
 }
   

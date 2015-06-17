@@ -17,6 +17,7 @@ function play() {
 	document.getElementById("start-page").style.display = "none";
 	document.getElementById("info-bar").style.display = "table";
 	document.getElementById("game-page").style.display = "block";
+	document.getElementById("canvas").style.display = "block";
 	isPlaying = true;
 }
 function pause(){
