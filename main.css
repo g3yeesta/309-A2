@@ -2,14 +2,15 @@ body {
      text-align: center;
 }
 
-#pause,
-#restart,
-#resume {
+#game-page
+#pause
+{
     display: none;
-	text-align: middle;
+	text-align: center;
+	margin: auto;
   }
   
- .menu-button {
+#start{
    border: 1px solid;
    margin: auto;
 }

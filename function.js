@@ -1,22 +1,30 @@
+window.onload = pageLoad; 
+
+var isPlaying = false;
+
+function pageLoad() {
+	document.getElementById("start").onclick = play;
+	document.getElementById("pause").onclick = pause;
+	document.getElementById("resume").onclick = resume;
+	document.getElementById("restart").onclick = restart;
+} 
+
+
 
 function play() {
 	document.getElementById("startmenu").style.display = "none";
 	document.getElementById("pause").style.display = "block";
+	document.getElementById("game-page").style.display = "block";
+	isPlaying = true;
 }
 function pause(){
-	document.getElementById("resume").style.display = "block";
-	document.getElementById("pause").style.display = "none";
-	document.getElementById("restart").style.display = "block";
-}
-
-function resume(){
-	document.getElementById("pause").style.display = "block";
-	document.getElementById("resume").style.display = "none";
-	document.getElementById("restart").style.display = "none";
-}
-
-function restart(){
-	document.getElementById("startmenu").style.display = "block";
-	document.getElementById("resume").style.display = "none";
-	document.getElementById("restart").style.display = "none";
+	if (isPlaying) {
+		isPlaying = false;
+		document.getElementById("pause").innerHTML  = "resume";
+	}
+	else{
+		isPlaying = true;
+		document.getElementById("pause").innerHTML  = "pause";
+	}
+	
 }

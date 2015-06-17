@@ -3,24 +3,22 @@
 	<head>
 		<title>The Game</title>
 		<link rel="stylesheet" href="main.css">
-	
+		<script src="function.js" type="text/javascript"></script>
 	</head>	
 <body>
-  <div id =startmenu>
-  <form action="JavaScript:play()">
+  <div id ="startmenu">
+  <form>
 	<input type="radio" name="level" value="1" checked>Level 1
 	<input type="radio" name="level" value="1">Level 2
-	<br>
-	<input type="submit" value="Play" class = "menu-button" >
 	</form> 
+	<br>
+	<button type="button"  id ="start">start</button>	
   </div>
   
-  <div>
-  <button type="button" onclick="JavaScript:pause()" id = pause class = "menu-button"> pause</button>
-  <button type="button" onclick="JavaScript:resume()" id = resume class = "menu-button">resume</button>
-  <button type="button" onclick="JavaScript:restart()" id = restart class = "menu-button">restart</button>
+  <div id ="game-page">
+  <button type="button" id ="pause" >pause</button>
   </div>
+ 
   
-	<script src="function.js" type="text/javascript"></script>
 </body>
 </html>
