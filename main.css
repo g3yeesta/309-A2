@@ -2,3 +2,15 @@ body {
      text-align: center;
 }
 
+#pause,
+#restart,
+#resume {
+    display: none;
+	text-align: middle;
+  }
+  
+ .menu-button {
+   border: 1px solid;
+   margin: auto;
+}
+  
