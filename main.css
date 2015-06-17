@@ -3,15 +3,35 @@ body {
 }
 
 #game-page
-#pause
+#info-bar
 {
     display: none;
 	text-align: center;
 	margin: auto;
+	width: 400px;
+	border: 1px solid;
   }
+ 
+ 
   
 #start{
    border: 1px solid;
    margin: auto;
+}
+
+#pause{
+	width: 40px;
+}
+
+.item{
+	box-sizing: border-box;
+	display: table-cell;
+	margin: auto;
+}
+
+.container{
+	display: table;
+	text-align: center;
+	margin: auto;
 }
   

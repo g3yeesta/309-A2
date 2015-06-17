@@ -1,22 +1,42 @@
 <!doctype html>
 <html>
 	<head>
+		<meta charset="UTF-8">
 		<title>Tap Bug Game</title>
 		<link rel="stylesheet" href="main.css">
 		<script src="function.js" type="text/javascript"></script>
 	</head>	
 <body>
-  <div id ="startmenu">
+ <!-- Start Page -->
+  <div id ="start-page">  
   <form>
-	<input type="radio" name="level" value="1" checked>Level 1
-	<input type="radio" name="level" value="1">Level 2
+		<input type="radio" name="level" value="1" checked>Level 1
+		<input type="radio" name="level" value="2">Level 2
 	</form> 
 	<br>
-	<button type="button"  id ="start">start</button>	
-  </div>
-  
+	<button type="button"  id ="start">Start!</button>	
+	<br>
+	<div class ="container">
+		<div class="item">High Score:</div>	
+		<div id = "high-score" class="item">0</div>	
+	</div>
+  </div>  
+   <!-- Game Page -->
   <div id ="game-page">
-  <button type="button" id ="pause" >pause</button>
+	 <!-- Info bar -->
+	<div id ="info-bar">
+		<div id = "timer" class="item">0</div>	
+		<div class="item">sec</div>	
+		<button type="button" id ="pause" class="item">| |</button>
+		<div class="item">Score:</div>	
+		<div id = "curr-score" class="item">0</div>	
+	</div>
+	
+	 <!-- Game content -->
+	 
+	 <canvas id="canvas" width="600" height="400">
+	      Your browser does not support the HTML5 canvas tag
+    </canvas>
   </div>
  
   
