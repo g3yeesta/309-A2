@@ -2,9 +2,14 @@ window.onload = pageLoad;
 
 var isPlaying = false;
 var highScore = 0;
-
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+var canvas, ctx;
+var foodx = []; //array holding food x coordinates
+var foody = []; //array holding food y coordinates
+//fill food arrays with food objects
+for (i = 0; i < 5; i++) { 
+    foodx.push(Math.random()*400);
+	foody.push(300+Math.random()*300);
+}
 
 /*
  *Bind buttons and variables to functions on load
@@ -13,7 +18,10 @@ var ctx = canvas.getContext("2d");
 function pageLoad() {
 	document.getElementById("start").onclick = play;
 	document.getElementById("pause").onclick = pause;	
-		
+	
+	canvas = document.getElementById("canvas");
+	ctx = canvas.getContext("2d");
+	
 	document.getElementById("high-score").innerHTML  = highScore;
 } 
 
@@ -23,6 +31,7 @@ function play() {
 	document.getElementById("game-page").style.display = "block";
 	document.getElementById("canvas").style.display = "block";
 	isPlaying = true;
+	drawFood();
 }
 function pause(){
 	if (isPlaying) {
@@ -36,3 +45,9 @@ function pause(){
 	
 }
 
+function drawFood(){
+	ctx.fillStyle='green';
+	for (i = 0; i < 5; i++) {
+		ctx.fillRect(foodx[i],foody[i],20,20);
+	}
+}
