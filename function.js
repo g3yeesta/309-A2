@@ -1,6 +1,10 @@
 window.onload = pageLoad; 
 
 var isPlaying = false;
+var highScore = 0;
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 
 /*
  *Bind buttons and variables to functions on load
@@ -9,8 +13,8 @@ var isPlaying = false;
 function pageLoad() {
 	document.getElementById("start").onclick = play;
 	document.getElementById("pause").onclick = pause;	
-	
-	var canvas = document.getElementById('canvas');
+		
+	document.getElementById("high-score").innerHTML  = highScore;
 } 
 
 function play() {
