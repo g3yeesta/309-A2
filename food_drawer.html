@@ -4,17 +4,47 @@
         <canvas id="myCanvas" width="20" height="20">
             Your browser does not support the HTML5 canvas tag.
         </canvas>
+
+        <style>
+            #myCanvas {background: #dddddd;}
+        </style>
+        
         <script>
             var c = document.getElementById("myCanvas");
             var ctx = c.getContext("2d");
 
-            var grd = ctx.createRadialGradient(15,15,6,15,15,1);
-            grd.addColorStop(0,"red");
-            grd.addColorStop(1,"white");
-
-            ctx.fillStyle=grd;
+            ctx.fillStyle="#FF9933";
             ctx.beginPath();
             ctx.arc(10,10,10,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.fillStyle="#331F0A";
+            ctx.beginPath();
+            ctx.arc(8.5,11,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(5,7.5,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(15,7,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(6,15,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(10,4,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(14,13,1,0,2*Math.PI);
+            ctx.fill()
+
+            ctx.beginPath();
+            ctx.arc(12,16,1,0,2*Math.PI);
             ctx.fill()
 
         </script>
