@@ -1,12 +1,10 @@
 window.onload = pageLoad; 
 
-var time = 60;
-var timer;
+var time, timer, bugTimer;
 var isPlaying = false;
 var highScore = 0;
 var canvas, ctx;
-var foodx = []; //array holding food x coordinates
-var foody = []; //array holding food y coordinates
+var food = []; //array holding food objects->format: {x,y}
 var startTime, pauseTime;
 
 /*
@@ -30,11 +28,9 @@ function play() {
 	document.getElementById("canvas").style.display = "block";
 	isPlaying = true;
 	//empty and then fill food arrays with food objects
-	foodx = [];
-	foody = [];
+	food = [];
 	for (i = 0; i < 5; i++) { 
-		foodx.push(Math.random()*400);
-		foody.push(300+Math.random()*300);
+		food.push({x:(Math.random()*400), y:(300+Math.random()*300) });
 	}
 	
 	ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -65,7 +61,8 @@ function pause(){
 function countdown(){
 	document.getElementById("timer").innerHTML  = time-1;
 	time = time -1;
-	if (time < 57){
+	//change value here to debug
+	if (time <= 0){
 		gameover();
 	}
 	else{
@@ -95,7 +92,7 @@ function gameover(){
 
 function drawFood(){
 	ctx.fillStyle='green';
-	for (i = 0; i < 5; i++) {
-		ctx.fillRect(foodx[i],foody[i],20,20);
+	for (i = 0; i < food.length; i++) {
+		ctx.fillRect(food[i].x,food[i].y,20,20);
 	}
 }
