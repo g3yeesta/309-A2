@@ -10,6 +10,9 @@ var food = []; //array holding food objects->format: {x,y}
 var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
+var rbug, obug, bbug;
+
+
 
 /*
  *Bind buttons and variables to functions on load
@@ -29,6 +32,14 @@ function pageLoad() {
 	}
 	
 	document.getElementById("high-score").innerHTML  = highScore;
+	
+	rbug = new Image();
+	bbug = new Image();
+	obug = new Image();
+	
+	rbug.src = 'red_bug.png';
+	bbug.src = 'black_bug.png';
+	obug.src = 'orange_bug.png';
 } 
 
 /*
@@ -191,12 +202,22 @@ function drawBugs(){
 		}
 		if (bugs.length <=0 ){
 			continue;
-		}		
-		ctx.fillStyle=bugs[i].colour;
+		}
+		var img;
+		if (bugs[i].colour == "orange"){
+			img = obug;
+		}
+		else if (bugs[i].colour == "red"){
+			img = rbug;
+		}
+		else{
+			img = bbug;
+		}
+		
 		/*document.getElementById("t1").innerHTML  = ctx.globalAlpha;
 		document.getElementById("t2").innerHTML  = bugs[i].dead;
 		document.getElementById("t3").innerHTML  = bugs.length;*/
-		ctx.fillRect(bugs[i].x,bugs[i].y,10,40);
+		ctx.drawImage(img, bugs[i].x,bugs[i].y);
 		ctx.globalAlpha = 1;
 	}
 }
