@@ -1,12 +1,13 @@
 window.onload = pageLoad; 
 
-var time, timer, bugTimer;
+var time = 60;
+var timer;
 var isPlaying = false;
-var highScore = 0; //change this line later
+var highScore = 0;
 var canvas, ctx;
-var food = []; //array holding food objects->format: {x,y}
+var foodx = []; //array holding food x coordinates
+var foody = []; //array holding food y coordinates
 var startTime, pauseTime;
-var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour}
 
 /*
  *Bind buttons and variables to functions on load
@@ -25,12 +26,15 @@ function pageLoad() {
 function play() {
 	document.getElementById("start-page").style.display = "none";
 	document.getElementById("info-bar").style.display = "table";
+	document.getElementById("game-page").style.display = "block";
 	document.getElementById("canvas").style.display = "block";
 	isPlaying = true;
 	//empty and then fill food arrays with food objects
-	food = [];
+	foodx = [];
+	foody = [];
 	for (i = 0; i < 5; i++) { 
-		food.push({x:(Math.random()*400), y:(300+Math.random()*300) });
+		foodx.push(Math.random()*400);
+		foody.push(300+Math.random()*300);
 	}
 	
 	ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -61,8 +65,7 @@ function pause(){
 function countdown(){
 	document.getElementById("timer").innerHTML  = time-1;
 	time = time -1;
-	//change value here to debug
-	if (time <= 0){
+	if (time < 57){
 		gameover();
 	}
 	else{
@@ -74,6 +77,7 @@ function countdown(){
 function quit(){
 	document.getElementById("start-page").style.display = "block";
 	document.getElementById("info-bar").style.display = "none";
+	document.getElementById("game-page").style.display = "none";
 	document.getElementById("canvas").style.display = "none";
 	isPlaying = false;
 }
@@ -85,30 +89,13 @@ function gameover(){
 	clearTimeout(timer);
 	isPlaying = false;
 
-	//placeholder delete later
+	//placeholder
 	canvas.onclick = quit;
 }
 
 function drawFood(){
 	ctx.fillStyle='green';
-	for (i = 0; i < food.length; i++) {
-		ctx.fillRect(food[i].x,food[i].y,20,20);
+	for (i = 0; i < 5; i++) {
+		ctx.fillRect(foodx[i],foody[i],20,20);
 	}
-}
-function spawnBug(){
-	var bX = 10+Math.random()*370;
-	var r = Math.random();
-	var c;
-	
-	if (r < 0.3 ){
-		c = "black";
-	}
-	else if (r < 0.6 ){
-		c = "red";
-	}
-	else {
-		c = "orange";
-	}
-	
-	bugs.push({x:bX, y:0, dx:0, dy:0 ,colour:c) });
 }

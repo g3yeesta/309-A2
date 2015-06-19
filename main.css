@@ -2,11 +2,16 @@ body {
      text-align: center;
 }
 
+#game-page
 #info-bar
 {
     display: none;
 	text-align: center;
 	margin: auto;		
+  }
+  
+#info-bar
+{  
 	width: 398px;
 	border: 1px solid;
   } 
