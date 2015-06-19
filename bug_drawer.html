@@ -4,25 +4,31 @@
         <canvas id="myCanvas" width="10" height="40">
             Your browser does not support the HTML5 canvas tag.
         </canvas>
+
+        <style>
+            #myCanvas {background: #dddddd;}
+        </style>
+
         <script>
             var c = document.getElementById("myCanvas");
             var ctx = c.getContext("2d");
-            ctx.fillStyle='orange'
-
-            ctx.moveTo(1.25,2.5);
-            ctx.lineTo(5,10);
-            ctx.moveTo(8.75,2.5);
-            ctx.lineTo(5,10);
+            ctx.fillStyle='black'
+            
+            ctx.moveTo(1.25,37.5);
+            ctx.lineTo(5,30);
+            ctx.moveTo(8.75,37.5);
+            ctx.lineTo(5,30);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(5,13,4,0,2*Math.PI);
+            ctx.arc(5,27,4,0,2*Math.PI);
             ctx.fill()
 
             ctx.scale(1, 3);
             ctx.beginPath();
-            ctx.arc(5,9,4,0,2*Math.PI);
+            ctx.arc(5,4.5,4,0,2*Math.PI);
             ctx.fill();
+
         </script>
     </body>
 </html>
