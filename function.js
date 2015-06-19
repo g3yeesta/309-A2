@@ -3,10 +3,10 @@ window.onload = pageLoad;
 var time, timer, bugTimer, animateTimer;
 var startTime, bugStartTime, pauseTime, animateStartTime;
 var isPlaying = false;
-var highScore = 0;
+var highScore = 0;  //TODO remember highscore using local storage
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
-var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour}
+var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
 
@@ -32,7 +32,8 @@ function play() {
 	//empty and then fill food arrays with food objects
 	food = [];
 	for (i = 0; i < 5; i++) { 
-		food.push({x:(Math.random()*400), y:(300+Math.random()*300) });
+		//max = width or height - 20 so it doesn't overflow
+		food.push({x:(Math.random()*380), y:(300+Math.random()*280) });
 	}
 	time =61;
 	countdown();	
@@ -79,7 +80,7 @@ function quit(){
 	document.getElementById("start-page").style.display = "block";
 	document.getElementById("info-bar").style.display = "none";
 	document.getElementById("canvas").style.display = "none";
-	isPlaying = false;
+	gameover();
 }
 
 function gameover(){
@@ -118,7 +119,8 @@ function spawnBug(){
 	else {
 		c = "black";
 	}
-	bugs.push({x:bX, y:0, dx:1, dy:1 ,colour:c});
+	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0});
+	bugs.push(b);
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
 	bugStartTime = new Date();	
@@ -136,19 +138,102 @@ function moveBugs(){
 	for (i = 0; i < bugs.length; i++) {
 		bugs[i].y += bugs[i].dy;
 		bugs[i].x += bugs[i].dx;
+		bugs[i].stepsToFood -= 1;
 	}
 }
 
-function calculateSpeed(){
-	//TODO calculate dx/dy here
+function calculateSpeed( bug ){		
+	//TODO re-adjust base on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
+	var nearestFood;
+	var distanceSum = 9000; //Max distance is 400(width))+600(height)
+	var distanceCheck;
+	for (i = 0; i < food.length; i++) {
+		distanceCheck = (Math.abs(bug.x - food[i].x) +  Math.abs(bug.y - food[i].y));
+		if (distanceCheck < distanceSum ){
+			distanceSum = distanceCheck;
+			nearestFood = i;
+		}
+	}	
+	var distanceX = (food[nearestFood].x - bug.x);
+	var distanceY = (food[nearestFood].y - bug.y);
+	var distance = Math.sqrt(Math.pow(distanceX,2)+Math.pow(distanceY,2));
+	var speed = 0;
+	if (bug.colour == "orange"){
+		if (document.getElementById("level2").checked){
+			speed = 80;
+		}else{
+			speed = 60;
+		}
+	}
+	else if (bug.colour == "red"){
+		if (document.getElementById("level2").checked){
+			speed = 100;
+		}else{
+			speed = 75;
+		}		
+	}
+	else{
+		if (document.getElementById("level2").checked){
+			speed = 200;
+		}else{
+			speed = 150;
+		}		
+	}
+	
+	speed = speed/(1000/framerate);
+	//using equivalent triangles to get dy and dx
+	var xspeed = speed*(distanceX/distance);
+	var yspeed = speed*(distanceY/distance);
+	/*
+	document.getElementById("t1").innerHTML  = speed;
+	document.getElementById("t2").innerHTML  = distanceX;
+	document.getElementById("t3").innerHTML  = distanceY;
+	document.getElementById("t4").innerHTML  = distance;
+	document.getElementById("t5").innerHTML  = xspeed;
+	document.getElementById("t6").innerHTML  = yspeed;
+	*/
+	bug.dx = xspeed;
+	bug.dy = yspeed;
+	bug.food = nearestFood;
+	bug.stepsToFood = distance/speed;
+	
+	return bug;
+}
+
+function onClick(){
+	//TODO add event handlers
 }
 
 function animate(){
 	ctx.clearRect(0,0, canvas.width, canvas.height);
 	drawFood();
-	drawBugs();
 	moveBugs();
-	//TODO code for checking if a bug ate food goes here
+	drawBugs();	
+	//TODO re-adjust eat checking for closest pixel/rotating bugs
+	//exists a bug that causes a food to get eaten early
+	var eaten = [];
+	for (i = 0; i < bugs.length; i++) {	
+		if (bugs[i].stepsToFood	<= 0){
+			eaten.push(bugs[i].food);
+		}							
+	}
+	//cut out all eaten food
+	for (i = 0; i < eaten.length; i++) {	
+		food.splice(eaten[i],1);
+	}
+	if ( food.length <= 0){		
+		gameover();
+		return;
+	}
+	//make bugs change targets if a food is now gone
+	//this loop cause it to crash for some reason
+	/*
+	if ( eaten.length > 0 && food.length > 0 ){
+		for (i = 0; i < bugs.length; i++) {	
+			bugs[i] = calculateSpeed(bugs[i]);
+		}
+	}
+	*/
 	animateTimer = setTimeout(function(){animate()},framerate);
 	animateStartTime = new Date();
 }
