@@ -7,7 +7,7 @@ var highScore = 0;
 var score = 0;
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
-var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food}
+var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
 
@@ -98,7 +98,7 @@ function gameover(){
 	ctx.fillText("Game Over",130,200);
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
-	clearTimeout(animateTimer);
+	//clearTimeout(animateTimer);
 	isPlaying = false;
 }
 
@@ -125,7 +125,7 @@ function spawnBug(){
 	else {
 		c = "black";
 	}
-	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0});
+	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1});
 	bugs.push(b);
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
@@ -134,23 +134,36 @@ function spawnBug(){
 }
 
 function drawBugs(){
-	for (var i = 0; i < bugs.length; i++) {
+	for (var i = bugs.length; i--;) {
+		if (bugs[i].dead){
+			bugs[i].fade -= (framerate/2000);
+			ctx.globalAlpha = bugs[i].fade;
+			if (bugs[i].fade <=0 ){
+				bugs.splice(i,1);
+			}
+		}
 		ctx.fillStyle=bugs[i].colour;
 		ctx.fillRect(bugs[i].x,bugs[i].y,10,40);
+		ctx.globalAlpha = 1;
 	}
 }
 
 function moveBugs(){
-	for (var i = 0; i < bugs.length; i++) {
-		bugs[i].y += bugs[i].dy;
-		bugs[i].x += bugs[i].dx;
-		bugs[i].stepsToFood -= 1;
+	for (var i = bugs.length; i--;) {
+		if (!bugs[i].dead){
+			bugs[i].y += bugs[i].dy;
+			bugs[i].x += bugs[i].dx;
+			bugs[i].stepsToFood -= 1;
+		}
 	}
 }
 
 function calculateSpeed( bug ){		
 	//TODO re-adjust based on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
 	//Possibly by keeping track of 4 corners after rotating
+	if (bug.dead){
+		return bug;
+	}	
 	var nearestFood;
 	var distanceSum = 9000; //Max distance is 400(width))+600(height)
 	var distanceCheck;
@@ -188,7 +201,7 @@ function calculateSpeed( bug ){
 	}
 	
 	speed = speed/(1000/framerate);
-	//using equivalent triangles to get dy and dx
+	//using similar triangles to get dy and dx
 	var xspeed = speed*(distanceX/distance);
 	var yspeed = speed*(distanceY/distance);
 	/*
@@ -232,8 +245,9 @@ function onClick(event){
 				score +=5;
 			}			
 			document.getElementById("score").innerHTML  = score;
-			//TODO fade death
-			bugs.splice(i,1);
+			bugs[i].dead = true;
+			bugs[i].dx = 0;
+			bugs[i].dy = 0;
 		}
 	}
 	if (score >= highScore){
@@ -253,16 +267,16 @@ function animate(){
 	moveBugs();
 	drawBugs();	
 	//check if a bug ate a food then remove and recalculate if it did.
-	for (var i = 0; i < bugs.length; i++) {	
+	for (var i = bugs.length; i--;) {	
 		if (bugs[i].stepsToFood	<= 0){
 			food.splice(bugs[i].food, 1);
 			if ( food.length <= 0){	
 				gameover();
-				return;
+				//return;
 			}
 			else{
 				//make bugs change targets if a food is now gone
-				for (var j = 0; j < bugs.length; j++) {	
+				for (var j = bugs.length; j--;) {	
 					bugs[j] = calculateSpeed(bugs[j]);
 				}
 			}
