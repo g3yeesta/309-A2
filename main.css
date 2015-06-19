@@ -2,6 +2,11 @@ body {
     text-align: center;
 }
 
+.image
+{
+	display: none;
+}
+
 #info-bar
 {
     display: none;

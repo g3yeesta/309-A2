@@ -5,20 +5,23 @@
 		<title>Tap Bug Game</title>
 		<link rel="stylesheet" href="main.css">
 		<script src="function.js" type="text/javascript"></script>
-	</head>	
+		<img id="orange" class="image" src="orange_bug.png">
+		<img id="red" class="image" src="red_bug.png">
+		<img id="black" class="image" src="black_bug.png">
+	</head>
 	<body>
 	 	<!-- Start Page -->
-	  	<div id ="start-page">  
+	  	<div id ="start-page">
 		  	<form>
 				<input type="radio" name="level" value="1" checked>Level 1
 				<input type="radio" name="level" value="2" id = "level2">Level 2
-			</form> 
+			</form>
 			<br>
-			<button type="button"  id ="start">Start!</button>	
+			<button type="button"  id ="start">Start!</button>
 			<br>
 			<div class ="container">
-				<div class="item">High Score:</div>	
-				<div id = "high-score" class="item">0</div>	
+				<div class="item">High Score:</div>
+				<div id = "high-score" class="item">0</div>
 			</div>
 	  	</div>
 	  	
@@ -26,24 +29,24 @@
 	  	<div id ="game-page">
 		 	<!-- Info bar -->
 			<div id ="info-bar">
-				<div id = "timer" class="item">60</div>	
-				<div class="item">sec</div>	
+				<div id = "timer" class="item">60</div>
+				<div class="item">sec</div>
 				<button type="button" id ="pause" class="item">| |</button>
-				<div class="item">Score:</div>	
-				<div id = "score" class="item">0</div>	
+				<div class="item">Score:</div>
+				<div id = "score" class="item">0</div>
 			</div>
 		
 		 	<!-- Game content -->	 
 			<canvas id="canvas" width="400" height="600">
-			      Your browser does not support the HTML5 canvas tag
+				Your browser does not support the HTML5 canvas tag
 		    </canvas>
 			
-			<div id = "t1"></div>	
-			<div id = "t2"></div>	
-			<div id = "t3"></div>	
-			<div id = "t4"></div>	
-			<div id = "t5"></div>	
-			<div id = "t6"></div>	
+			<div id = "t1"></div>
+			<div id = "t2"></div>
+			<div id = "t3"></div>
+			<div id = "t4"></div>
+			<div id = "t5"></div>
+			<div id = "t6"></div>
 			
 	  	</div>
 	</body>
