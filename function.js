@@ -61,9 +61,15 @@ function pause(){
 		clearTimeout(bugTimer);
 		clearTimeout(animateTimer);
 		pauseTime = new Date();
+		
+		ctx.font="30px Georgia";
+		ctx.fillStyle='black';
+		ctx.fillText("Restart",70,300);		
+		ctx.fillText("Quit",250,300);
+		
 	}
 	else{
-		//resume //TODO disable pausing after game over
+		//resume //TODO disable pausing after game over, pause on change tab
 		isPlaying = true;
 		document.getElementById("pause").innerHTML  = "| |";
 		timer = setTimeout(function(){countdown()},(1000-(pauseTime-startTime)));
@@ -75,7 +81,6 @@ function pause(){
 function countdown(){
 	document.getElementById("timer").innerHTML  = time-1;
 	time = time -1;
-	//change value here to debug
 	if (time <= 0){
 		gameover();
 	}
@@ -96,10 +101,15 @@ function gameover(){
 	ctx.font="30px Georgia";
 	ctx.fillStyle='black';
 	ctx.fillText("Game Over",130,200);
+	ctx.fillText("Restart",70,300);		
+	ctx.fillText("Quit",250,300);
+	ctx.fillText("Score: "+score ,140,400);
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
-	//clearTimeout(animateTimer);
+	clearTimeout(animateTimer);
 	isPlaying = false;
+	
+	
 }
 
 function drawFood(){
@@ -131,18 +141,30 @@ function spawnBug(){
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
 	bugStartTime = new Date();	
 	
+	//document.getElementById("t6").innerHTML  = nextBug;
 }
 
 function drawBugs(){
 	for (var i = bugs.length; i--;) {
 		if (bugs[i].dead){
 			bugs[i].fade -= (framerate/2000);
-			ctx.globalAlpha = bugs[i].fade;
 			if (bugs[i].fade <=0 ){
 				bugs.splice(i,1);
 			}
+			else{
+				ctx.globalAlpha = bugs[i].fade;
+			}
 		}
+		else{
+			ctx.globalAlpha = 1;
+		}
+		if (bugs.length <=0 ){
+			continue;
+		}		
 		ctx.fillStyle=bugs[i].colour;
+		/*document.getElementById("t1").innerHTML  = ctx.globalAlpha;
+		document.getElementById("t2").innerHTML  = bugs[i].dead;
+		document.getElementById("t3").innerHTML  = bugs.length;*/
 		ctx.fillRect(bugs[i].x,bugs[i].y,10,40);
 		ctx.globalAlpha = 1;
 	}
@@ -221,20 +243,32 @@ function calculateSpeed( bug ){
 }
 
 function onClick(event){
-	if(!isPlaying){
-		//quit();
-		return;
-	}
+	
 	var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
     var y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 
 	x -= canvas.offsetLeft;
 	y -= canvas.offsetTop;
+	
+	if(!isPlaying){
+		//restart button
+		if ( (50 < x) && (x < 190) && (250 < y) && (y < 320) ){
+			play();
+		}
+		//quit button
+		else if ( (225 < x) && (x < 330) && (260 < y) && (y < 320) ){
+			quit();
+		}
+		return;
+	}	
 
-	//TODO readjust for closest pixels and rotating
-	//reverse loop for killing multiple
-	for (var i = bugs.length; i--;) {	
-		if (Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30){
+	//TODO re-adjust for closest pixels and rotating
+	//reverse loop is safer when splicing elements out
+	for (var i = bugs.length; i--;) {
+		if (bugs[i].dead){
+			continue;
+		}
+		else if (Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30){
 			if (bugs[i].colour == "orange"){
 				score +=1;
 			}
@@ -256,9 +290,7 @@ function onClick(event){
 		if (typeof(Storage) != "undefined") {
 		    localStorage.setItem("highScore", highScore);
 		}
-	}
-
-	
+	}	
 }
 
 function animate(){
@@ -272,7 +304,7 @@ function animate(){
 			food.splice(bugs[i].food, 1);
 			if ( food.length <= 0){	
 				gameover();
-				//return;
+				return;
 			}
 			else{
 				//make bugs change targets if a food is now gone
@@ -282,6 +314,7 @@ function animate(){
 			}
 		}							
 	}
+	
 	animateTimer = setTimeout(function(){animate()},framerate);
 	animateStartTime = new Date();
 }
