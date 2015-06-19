@@ -58,7 +58,7 @@ function pause(){
 		document.getElementById("pause").innerHTML  = "| |";
 		timer = setTimeout(function(){countdown()},(1000-(pauseTime-startTime)));
 		bugTimer = setTimeout(function(){spawnBug()},(nextBug-(pauseTime-bugStartTime)));
-		animateTimer = setTimeout(function(){spawnBug()},(framerate-(pauseTime-animateStartTime)));
+		animateTimer = setTimeout(function(){animate()},(framerate-(pauseTime-animateStartTime)));
 	}
 }
 
@@ -139,6 +139,9 @@ function moveBugs(){
 	}
 }
 
+function calculateSpeed(){
+	//TODO calculate dx/dy here
+}
 
 function animate(){
 	ctx.clearRect(0,0, canvas.width, canvas.height);
