@@ -1,44 +1,60 @@
 body {
     text-align: center;
+    padding: 0;
+    margin: 0;
+	border: none;
 }
 
-#info-bar
-{
+#info-bar {
     display: none;
     background: #FF9933;
 	text-align: center;
 	margin: auto;
 	width: 398px;
-	border: 1px solid;
-  } 
-  
-#start{
-   	border: 1px solid;
-   	margin: auto;
+	padding: 1px;
 }
 
-#pause{
+#start-page {
+	background: #dddddd;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+#start {
+   	margin: auto;
+   	padding: 0;
+	border: none;
+	background: #dddddd;
+  	color: #FF9933;
+  	font-weight: bold;
+  	font-size: 150%;
+  	text-transform: uppercase;
+
+}
+
+#pause {
 	width: 40px;
 	padding: 0;
 	border: none;
 	background: #FF9933;
 }
 
-.item{
+.item {
 	box-sizing: border-box;
 	display: table-cell;
 	margin: auto;
 }
 
-.container{
+.container {
 	display: table;
 	text-align: center;
 	margin: auto;
 }
 
-canvas{
+canvas {
   	margin: auto;
   	display: none;
   	background: #dddddd;
 }
-  
