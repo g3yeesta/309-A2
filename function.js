@@ -31,6 +31,10 @@ function pageLoad() {
 	document.getElementById("high-score").innerHTML  = highScore;
 } 
 
+/*
+ *On pressing start or restart
+ */
+
 function play() {
 	document.getElementById("start-page").style.display = "none";
 	document.getElementById("info-bar").style.display = "table";
@@ -51,6 +55,10 @@ function play() {
 	document.getElementById("score").innerHTML  = score;
 	animate();
 }
+
+/*
+ *On pressing pause
+ */
 
 function pause(){
 	if (isPlaying) {
@@ -78,6 +86,10 @@ function pause(){
 	}
 }
 
+/*
+ *Countdown timer method that every second to decrement the timer
+ */
+
 function countdown(){
 	document.getElementById("timer").innerHTML  = time-1;
 	time = time -1;
@@ -90,12 +102,21 @@ function countdown(){
 	}
 }
 
+/*
+ *Exit to start page
+ */
+
+
 function quit(){
 	document.getElementById("start-page").style.display = "block";
 	document.getElementById("info-bar").style.display = "none";
 	document.getElementById("canvas").style.display = "none";
 	gameover();
 }
+
+/*
+ *Runs when food or timer reaches 0
+ */
 
 function gameover(){
 	ctx.font="30px Georgia";
@@ -107,10 +128,12 @@ function gameover(){
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
 	clearTimeout(animateTimer);
-	isPlaying = false;
-	
-	
+	isPlaying = false;	
 }
+
+/*
+ *Draws food on canvas
+ */
 
 function drawFood(){
 	ctx.fillStyle='green';
@@ -118,6 +141,10 @@ function drawFood(){
 		ctx.fillRect(food[i].x,food[i].y,20,20);
 	}
 }
+
+/*
+ *Countdown timer method for when the next bug will spawn, runs randomly between 1 and 3 seconds
+ */
 
 function spawnBug(){
 	//leftmost pixel at 10, rightmost pixel at 390
@@ -143,6 +170,10 @@ function spawnBug(){
 	
 	//document.getElementById("t6").innerHTML  = nextBug;
 }
+
+/*
+ *Draws bugs on canvas
+ */
 
 function drawBugs(){
 	for (var i = bugs.length; i--;) {
@@ -170,6 +201,10 @@ function drawBugs(){
 	}
 }
 
+/*
+ *Changes the position of the bugs based on the speed: dx, dy
+ */
+
 function moveBugs(){
 	for (var i = bugs.length; i--;) {
 		if (!bugs[i].dead){
@@ -179,6 +214,10 @@ function moveBugs(){
 		}
 	}
 }
+
+/*
+ *Function for finding the speed and vector (dx, dy) of a bug based on the nearest food
+ */
 
 function calculateSpeed( bug ){		
 	//TODO re-adjust based on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
@@ -242,6 +281,10 @@ function calculateSpeed( bug ){
 	return bug;
 }
 
+/*
+ *Function for event handling a click on the canvas
+ */
+
 function onClick(event){
 	
 	var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
@@ -292,6 +335,10 @@ function onClick(event){
 		}
 	}	
 }
+
+/*
+ *Function that runs every frame of the game
+ */
 
 function animate(){
 	ctx.clearRect(0,0, canvas.width, canvas.height);
