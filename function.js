@@ -31,7 +31,7 @@ function play() {
 	isPlaying = true;
 	//empty and then fill food arrays with food objects
 	food = [];
-	for (i = 0; i < 5; i++) { 
+	for (var i = 0; i < 5; i++) { 
 		//max = width or height - 20 so it doesn't overflow
 		food.push({x:(Math.random()*380), y:(300+Math.random()*280) });
 	}
@@ -98,7 +98,7 @@ function gameover(){
 
 function drawFood(){
 	ctx.fillStyle='green';
-	for (i = 0; i < food.length; i++) {
+	for (var i = 0; i < food.length; i++) {
 		ctx.fillRect(food[i].x,food[i].y,20,20);
 	}
 }
@@ -128,14 +128,14 @@ function spawnBug(){
 }
 
 function drawBugs(){
-	for (i = 0; i < bugs.length; i++) {
+	for (var i = 0; i < bugs.length; i++) {
 		ctx.fillStyle=bugs[i].colour;
 		ctx.fillRect(bugs[i].x,bugs[i].y,10,40);
 	}
 }
 
 function moveBugs(){
-	for (i = 0; i < bugs.length; i++) {
+	for (var i = 0; i < bugs.length; i++) {
 		bugs[i].y += bugs[i].dy;
 		bugs[i].x += bugs[i].dx;
 		bugs[i].stepsToFood -= 1;
@@ -147,7 +147,7 @@ function calculateSpeed( bug ){
 	var nearestFood;
 	var distanceSum = 9000; //Max distance is 400(width))+600(height)
 	var distanceCheck;
-	for (i = 0; i < food.length; i++) {
+	for (var i = 0; i < food.length; i++) {
 		distanceCheck = (Math.abs(bug.x - food[i].x) +  Math.abs(bug.y - food[i].y));
 		if (distanceCheck < distanceSum ){
 			distanceSum = distanceCheck;
@@ -210,15 +210,14 @@ function animate(){
 	moveBugs();
 	drawBugs();	
 	//TODO re-adjust eat checking for closest pixel/rotating bugs
-	//exists a bug that causes a food to get eaten early
 	var eaten = [];
-	for (i = 0; i < bugs.length; i++) {	
+	for (var i = 0; i < bugs.length; i++) {	
 		if (bugs[i].stepsToFood	<= 0){
 			eaten.push(bugs[i].food);
 		}							
 	}
 	//cut out all eaten food
-	for (i = 0; i < eaten.length; i++) {	
+	for (var i = 0; i < eaten.length; i++) {	
 		food.splice(eaten[i],1);
 	}
 	if ( food.length <= 0){		
@@ -226,14 +225,11 @@ function animate(){
 		return;
 	}
 	//make bugs change targets if a food is now gone
-	//this loop cause it to crash for some reason
-	/*
 	if ( eaten.length > 0 && food.length > 0 ){
-		for (i = 0; i < bugs.length; i++) {	
+		for (var i = 0; i < bugs.length; i++) {	
 			bugs[i] = calculateSpeed(bugs[i]);
 		}
 	}
-	*/
 	animateTimer = setTimeout(function(){animate()},framerate);
 	animateStartTime = new Date();
 }
