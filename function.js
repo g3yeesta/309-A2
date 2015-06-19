@@ -10,7 +10,7 @@ var food = []; //array holding food objects->format: {x,y}
 var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
-var rbug, obug, bbug;
+var rbugImg, obugImg, bbugImg, foodImg;
 
 
 
@@ -33,13 +33,15 @@ function pageLoad() {
 	
 	document.getElementById("high-score").innerHTML  = highScore;
 	
-	rbug = new Image();
-	bbug = new Image();
-	obug = new Image();
+	rbugImg = new Image();
+	bbugImg = new Image();
+	obugImg = new Image();
+	foodImg = new Image();
 	
-	rbug.src = 'red_bug.png';
-	bbug.src = 'black_bug.png';
-	obug.src = 'orange_bug.png';
+	rbugImg.src = 'red_bug.png';
+	bbugImg.src = 'black_bug.png';
+	obugImg.src = 'orange_bug.png';
+	foodImg.src = 'food.png';
 } 
 
 /*
@@ -147,9 +149,8 @@ function gameover(){
  */
 
 function drawFood(){
-	ctx.fillStyle='green';
 	for (var i = 0; i < food.length; i++) {
-		ctx.fillRect(food[i].x,food[i].y,20,20);
+		ctx.drawImage(foodImg, food[i].x, food[i].y);
 	}
 }
 
@@ -205,13 +206,13 @@ function drawBugs(){
 		}
 		var img;
 		if (bugs[i].colour == "orange"){
-			img = obug;
+			img = obugImg;
 		}
 		else if (bugs[i].colour == "red"){
-			img = rbug;
+			img = rbugImg;
 		}
 		else{
-			img = bbug;
+			img = bbugImg;
 		}
 		
 		/*document.getElementById("t1").innerHTML  = ctx.globalAlpha;
