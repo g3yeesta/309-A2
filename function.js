@@ -7,11 +7,10 @@ var highScore = 0;
 var score = 0;
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
-var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade}
+var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade,angle}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
 var rbug, obug, bbug;
-
 
 
 /*
@@ -173,7 +172,7 @@ function spawnBug(){
 	else {
 		c = "black";
 	}
-	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1});
+	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1, angle:0});
 	bugs.push(b);
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
@@ -212,12 +211,18 @@ function drawBugs(){
 		}
 		else{
 			img = bbug;
-		}
-		
+		}		
 		/*document.getElementById("t1").innerHTML  = ctx.globalAlpha;
 		document.getElementById("t2").innerHTML  = bugs[i].dead;
 		document.getElementById("t3").innerHTML  = bugs.length;*/
-		ctx.drawImage(img, bugs[i].x,bugs[i].y);
+		
+		ctx.translate(bugs[i].x, bugs[i].y);   
+		ctx.rotate(bugs[i].angle - 0.5*Math.PI); 		
+		ctx.translate(-bugs[i].x, -bugs[i].y); 	
+		ctx.drawImage(img, bugs[i].x, bugs[i].y);
+		ctx.setTransform(1,0,0,1,0,0); 
+		//ctx.drawImage(img, bugs[i].x,bugs[i].y);
+		
 		ctx.globalAlpha = 1;
 	}
 }
@@ -286,6 +291,7 @@ function calculateSpeed( bug ){
 	//using similar triangles to get dy and dx
 	var xspeed = speed*(distanceX/distance);
 	var yspeed = speed*(distanceY/distance);
+	var a =  Math.atan2(distanceY, distanceX);
 	/*
 	document.getElementById("t1").innerHTML  = speed;
 	document.getElementById("t2").innerHTML  = distanceX;
@@ -298,6 +304,7 @@ function calculateSpeed( bug ){
 	bug.dy = yspeed;
 	bug.food = nearestFood;
 	bug.stepsToFood = distance/speed;
+	bug.angle = a;
 	
 	return bug;
 }
@@ -313,6 +320,8 @@ function onClick(event){
 
 	x -= canvas.offsetLeft;
 	y -= canvas.offsetTop;
+	
+	alert("x:" + x + " y:" + y);
 	
 	if(!isPlaying){
 		//restart button
