@@ -1,9 +1,9 @@
-window.onload = pageLoad; 
+window.onload = pageLoad;
 
 var time, timer, bugTimer, animateTimer;
 var startTime, bugStartTime, pauseTime, animateStartTime;
 var isPlaying = false;
-var highScore = 0;  
+var highScore = 0;
 var score = 0;
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
@@ -28,7 +28,7 @@ function pageLoad() {
     highScore = localStorage.getItem("highScore");
 	}
 	
-	document.getElementById("high-score").innerHTML  = highScore;
+	document.getElementById("high-score").innerHTML = highScore;
 } 
 
 /*
@@ -47,12 +47,12 @@ function play() {
 		food.push({x:(Math.random()*380), y:(300+Math.random()*280) });
 	}
 	time =61;
-	countdown();	
-	bugs = []; 
+	countdown();
+	bugs = [];
 	spawnBug();
 	
-	score = 0
-	document.getElementById("score").innerHTML  = score;
+	score = 0;
+	document.getElementById("score").innerHTML = score;
 	animate();
 }
 
@@ -64,7 +64,7 @@ function pause(){
 	if (isPlaying) {
 		//pause
 		isPlaying = false;
-		document.getElementById("pause").innerHTML  = "►";
+		document.getElementById("pause").innerHTML = "►";
 		clearTimeout(timer);
 		clearTimeout(bugTimer);
 		clearTimeout(animateTimer);
@@ -72,14 +72,13 @@ function pause(){
 		
 		ctx.font="30px Georgia";
 		ctx.fillStyle='black';
-		ctx.fillText("Restart",70,300);		
+		ctx.fillText("Restart",70,300);
 		ctx.fillText("Quit",250,300);
-		
 	}
 	else{
 		//resume //TODO disable pausing after game over, pause on change tab
 		isPlaying = true;
-		document.getElementById("pause").innerHTML  = "| |";
+		document.getElementById("pause").innerHTML = "| |";
 		timer = setTimeout(function(){countdown()},(1000-(pauseTime-startTime)));
 		bugTimer = setTimeout(function(){spawnBug()},(nextBug-(pauseTime-bugStartTime)));
 		animateTimer = setTimeout(function(){animate()},(framerate-(pauseTime-animateStartTime)));
@@ -119,12 +118,12 @@ function quit(){
  */
 
 function gameover(){
-	ctx.font="30px Georgia";
-	ctx.fillStyle='black';
+	ctx.font = "30px Georgia";
+	ctx.fillStyle = 'black';
 	ctx.fillText("Game Over",130,200);
-	ctx.fillText("Restart",70,300);		
+	ctx.fillText("Restart",70,300);
 	ctx.fillText("Quit",250,300);
-	ctx.fillText("Score: "+score ,140,400);
+	ctx.fillText("Score: " + score ,140,400);
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
 	clearTimeout(animateTimer);
@@ -136,9 +135,9 @@ function gameover(){
  */
 
 function drawFood(){
-	ctx.fillStyle='green';
+	ctx.fillStyle = 'green';
 	for (var i = 0; i < food.length; i++) {
-		ctx.fillRect(food[i].x,food[i].y,20,20);
+		ctx.fillRect(food[i].x, food[i].y, 20, 20);
 	}
 }
 
