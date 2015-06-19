@@ -5,6 +5,7 @@ body {
 #info-bar
 {
     display: none;
+    background: #FF9933;
 	text-align: center;
 	margin: auto;		
 	width: 398px;
@@ -18,6 +19,9 @@ body {
 
 #pause{
 	width: 40px;
+	padding: 0;
+	border: none;
+	background: #FF9933;
 }
 
 .item{
