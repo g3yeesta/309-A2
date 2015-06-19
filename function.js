@@ -3,7 +3,8 @@ window.onload = pageLoad;
 var time, timer, bugTimer, animateTimer;
 var startTime, bugStartTime, pauseTime, animateStartTime;
 var isPlaying = false;
-var highScore = 0;  //TODO remember highscore using local storage
+var highScore = 0;  
+var score = 0;
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
 var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food}
@@ -20,6 +21,12 @@ function pageLoad() {
 	
 	canvas = document.getElementById("canvas");
 	ctx = canvas.getContext("2d");
+	
+	canvas.addEventListener("mousedown", onClick, false);
+	
+	if (typeof(Storage) != "undefined") {
+    highScore = localStorage.getItem("highScore");
+	}
 	
 	document.getElementById("high-score").innerHTML  = highScore;
 } 
@@ -40,6 +47,8 @@ function play() {
 	bugs = []; 
 	spawnBug();
 	
+	score = 0
+	document.getElementById("score").innerHTML  = score;
 	animate();
 }
 
@@ -91,9 +100,6 @@ function gameover(){
 	clearTimeout(bugTimer);
 	clearTimeout(animateTimer);
 	isPlaying = false;
-
-	//placeholder
-	canvas.onclick = quit;
 }
 
 function drawFood(){
@@ -143,7 +149,8 @@ function moveBugs(){
 }
 
 function calculateSpeed( bug ){		
-	//TODO re-adjust base on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
+	//TODO re-adjust based on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
+	//Possibly by keeping track of 4 corners after rotating
 	var nearestFood;
 	var distanceSum = 9000; //Max distance is 400(width))+600(height)
 	var distanceCheck;
@@ -200,8 +207,44 @@ function calculateSpeed( bug ){
 	return bug;
 }
 
-function onClick(){
-	//TODO add event handlers
+function onClick(event){
+	if(!isPlaying){
+		//quit();
+		return;
+	}
+	var x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+    var y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+
+	x -= canvas.offsetLeft;
+	y -= canvas.offsetTop;
+
+	//TODO readjust for closest pixels and rotating
+	//reverse loop for killing multiple
+	for (var i = bugs.length; i--;) {	
+		if (Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30){
+			if (bugs[i].colour == "orange"){
+				score +=1;
+			}
+			else if (bugs[i].colour == "red"){
+				score +=3;
+			}
+			else{
+				score +=5;
+			}			
+			document.getElementById("score").innerHTML  = score;
+			//TODO fade death
+			bugs.splice(i,1);
+		}
+	}
+	if (score >= highScore){
+		highScore = score;
+		document.getElementById("high-score").innerHTML  = highScore;
+		if (typeof(Storage) != "undefined") {
+		    localStorage.setItem("highScore", highScore);
+		}
+	}
+
+	
 }
 
 function animate(){
@@ -209,7 +252,7 @@ function animate(){
 	drawFood();
 	moveBugs();
 	drawBugs();	
-	//TODO dunno if corner cases where food gets eaten by two bugs in the same frame causes extra food to disappear
+	//check if a bug ate a food then remove and recalculate if it did.
 	for (var i = 0; i < bugs.length; i++) {	
 		if (bugs[i].stepsToFood	<= 0){
 			food.splice(bugs[i].food, 1);
