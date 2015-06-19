@@ -209,26 +209,21 @@ function animate(){
 	drawFood();
 	moveBugs();
 	drawBugs();	
-	//TODO re-adjust eat checking for closest pixel/rotating bugs
-	var eaten = [];
+	//TODO dunno if corner cases where food gets eaten by two bugs in the same frame causes extra food to disappear
 	for (var i = 0; i < bugs.length; i++) {	
 		if (bugs[i].stepsToFood	<= 0){
-			eaten.push(bugs[i].food);
+			food.splice(bugs[i].food, 1);
+			if ( food.length <= 0){	
+				gameover();
+				return;
+			}
+			else{
+				//make bugs change targets if a food is now gone
+				for (var j = 0; j < bugs.length; j++) {	
+					bugs[j] = calculateSpeed(bugs[j]);
+				}
+			}
 		}							
-	}
-	//cut out all eaten food
-	for (var i = 0; i < eaten.length; i++) {	
-		food.splice(eaten[i],1);
-	}
-	if ( food.length <= 0){		
-		gameover();
-		return;
-	}
-	//make bugs change targets if a food is now gone
-	if ( eaten.length > 0 && food.length > 0 ){
-		for (var i = 0; i < bugs.length; i++) {	
-			bugs[i] = calculateSpeed(bugs[i]);
-		}
 	}
 	animateTimer = setTimeout(function(){animate()},framerate);
 	animateStartTime = new Date();
