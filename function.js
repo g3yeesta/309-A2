@@ -57,7 +57,7 @@ function play() {
 	food = [];
 	for (var i = 0; i < 5; i++) { 
 		//max = width or height - 20 so it doesn't overflow
-		food.push({x:(Math.random()*380), y:(300+Math.random()*280) });
+		food.push({x:(10+(Math.random()*390)), y:(310+Math.random()*290) });
 	}
 	time =61;
 	countdown();
@@ -154,7 +154,7 @@ function gameover(){
 
 function drawFood(){
 	for (var i = 0; i < food.length; i++) {
-		ctx.drawImage(foodImg, food[i].x, food[i].y);
+		ctx.drawImage(foodImg, food[i].x-10, food[i].y-10);
 	}
 }
 
@@ -178,7 +178,7 @@ function spawnBug(){
 	else {
 		c = "black";
 	}
-	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1, angle:0, headx:bX, heady:20});
+	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1, angle:0, headx:bX, heady:40});
 	bugs.push(b);
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
@@ -250,7 +250,7 @@ function calculateSpeed( bug ){
 	var distanceSum = 9000; //Max distance is 400(width))+600(height)
 	var distanceCheck;
 	for (var i = 0; i < food.length; i++) {
-		distanceCheck = (Math.abs(bug.x - food[i].x) +  Math.abs(bug.y - food[i].y));
+		distanceCheck = (Math.abs(bug.x + bug.headx - food[i].x) +  Math.abs(bug.y + bug.heady - food[i].y));
 		if (distanceCheck < distanceSum ){
 			distanceSum = distanceCheck;
 			nearestFood = i;
@@ -319,10 +319,12 @@ function onClick(event){
 	if(!isPlaying){
 		//restart button
 		if ( (50 < x) && (x < 190) && (250 < y) && (y < 320) ){
+			gameover();
 			play();
 		}
 		//quit button
 		else if ( (245 < x) && (x < 350) && (260 < y) && (y < 320) ){
+			gameover();
 			quit();
 		}
 		return;
