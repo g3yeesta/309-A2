@@ -301,8 +301,8 @@ function calculateSpeed( bug ){
 	bug.dx = xspeed;
 	bug.dy = yspeed;
 	
-	bug.headx = bug.x + bodylengthx;
-	bug.heady = bug.y + bodylengthy;
+	bug.headx =  bodylengthx;
+	bug.heady =  bodylengthy;
 	var bodylength = Math.sqrt(Math.pow(bodylengthx,2)+Math.pow(bodylengthy,2));
 	bug.food = nearestFood;
 	bug.stepsToFood = (distance-bodylength)/speed;
@@ -344,7 +344,8 @@ function onClick(event){
 		if (bugs[i].dead){
 			continue;
 		}
-		else if (Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30){
+		else if ((Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30) || 
+				(Math.sqrt((bugs[i].x+bugs[i].headx-x)*(bugs[i].x+bugs[i].headx-x) + (bugs[i].y+bugs[i].heady-y)*(bugs[i].y+bugs[i].heady-y)) < 30) ){
 			if (bugs[i].colour == "orange"){
 				score +=1;
 			}
@@ -379,22 +380,23 @@ function animate(){
 	moveBugs();
 	drawBugs();	
 	//check if a bug ate a food then remove and recalculate if it did.
-	for (var i = bugs.length; i--;) {	
-		if (bugs[i].stepsToFood	<= 0){
-			food.splice(bugs[i].food, 1);
-			if ( food.length <= 0){	
-				gameover();
-				return;
-			}
-			else{
-				//make bugs change targets if a food is now gone
-				for (var j = bugs.length; j--;) {	
-					bugs[j] = calculateSpeed(bugs[j]);
+	if ( food.length >= 0){
+		for (var i = bugs.length; i--;) {	
+			if (bugs[i].stepsToFood	<= 0){
+				food.splice(bugs[i].food, 1);
+				if ( food.length <= 0){	
+					gameover();
+					//return;
 				}
-			}
-		}							
+				else{
+					//make bugs change targets if a food is now gone
+					for (var j = bugs.length; j--;) {	
+						bugs[j] = calculateSpeed(bugs[j]);
+					}
+				}
+			}							
+		}
 	}
-	
 	animateTimer = setTimeout(function(){animate()},framerate);
 	animateStartTime = new Date();
 }
