@@ -67,7 +67,7 @@ function play() {
 
 	document.getElementById("pause").innerHTML  = "&#10074;&#10074;";
 	
-	score = 0
+	score = 0;
 	document.getElementById("score").innerHTML  = score;
 	animate();
 }
@@ -203,7 +203,7 @@ function drawBugs(){
 			}
 		}
 		if (bugs.length <=0 ){
-			continue;
+			return;
 		}
 		var img;
 		if (bugs[i].colour == "orange"){
@@ -250,7 +250,7 @@ function calculateSpeed( bug ){
 	var distanceSum = 9000; //Max distance is 400(width))+600(height)
 	var distanceCheck;
 	for (var i = 0; i < food.length; i++) {
-		distanceCheck = (Math.abs(bug.x + bug.headx - food[i].x) +  Math.abs(bug.y + bug.heady - food[i].y));
+		distanceCheck = Math.sqrt(Math.pow((bug.x + bug.headx - food[i].x),2) +  Math.pow(((bug.y + bug.heady - food[i].y)),2));
 		if (distanceCheck < distanceSum ){
 			distanceSum = distanceCheck;
 			nearestFood = i;
