@@ -62,6 +62,8 @@ function play() {
 	countdown();	
 	bugs = []; 
 	spawnBug();
+
+	document.getElementById("pause").innerHTML  = "| |";
 	
 	score = 0
 	document.getElementById("score").innerHTML  = score;
