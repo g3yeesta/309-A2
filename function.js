@@ -63,7 +63,7 @@ function play() {
 	bugs = []; 
 	spawnBug();
 
-	document.getElementById("pause").innerHTML  = "| |";
+	document.getElementById("pause").innerHTML  = "&#10074;&#10074;";
 	
 	score = 0
 	document.getElementById("score").innerHTML  = score;
@@ -93,7 +93,7 @@ function pause(){
 	else{
 		//resume //TODO disable pausing after game over, pause on change tab
 		isPlaying = true;
-		document.getElementById("pause").innerHTML  = "| |";
+		document.getElementById("pause").innerHTML  = "&#10074;&#10074;";
 		timer = setTimeout(function(){countdown()},(1000-(pauseTime-startTime)));
 		bugTimer = setTimeout(function(){spawnBug()},(nextBug-(pauseTime-bugStartTime)));
 		animateTimer = setTimeout(function(){animate()},(framerate-(pauseTime-animateStartTime)));
