@@ -164,7 +164,7 @@ function drawFood(){
 
 function spawnBug(){
 	//leftmost pixel at 10, rightmost pixel at 390
-	var bX = 10+(Math.random()*370);
+	var bX = 15+(Math.random()*385);
 	var rColour = Math.random();
 	var c;
 	nextBug = 1000+(Math.random()*2000);
@@ -218,7 +218,7 @@ function drawBugs(){
 		ctx.translate(bugs[i].x, bugs[i].y);   
 		ctx.rotate(bugs[i].angle); 		
 		ctx.translate(-bugs[i].x, -bugs[i].y); 	
-		ctx.drawImage(img, bugs[i].x, bugs[i].y);
+		ctx.drawImage(img, bugs[i].x-5, bugs[i].y-5);
 		ctx.setTransform(1,0,0,1,0,0); 		
 		ctx.globalAlpha = 1;
 	}
