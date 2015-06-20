@@ -1,6 +1,6 @@
 # Tap Bug Game
 
-by Stanley Yee (g3yeesta) and Kevin Hsiao (c3hsiaod)
+by Stanley Yee (g3yeesta) and Chia-Hung Haiao (c3hsiaod)
 
 Overview:
 
@@ -22,4 +22,4 @@ Design Documentation:
 
 3 functions were used to handle the buttons required (start,pause,quit). 
 
-The 3 helper functions were used to handle specifice events. Game over, moving bugs and calculating the speed and direction of bugs. Calculating the speed required using 
+The 3 helper functions were used to handle specifice events. Game over, moving bugs and calculating the speed and direction of bugs.The Pythagorean theorem to calculate diagonal speed and distance as well as the area of a circle for a click event. 
