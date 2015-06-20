@@ -7,7 +7,7 @@ var highScore = 0;
 var score = 0;
 var canvas, ctx;
 var food = []; //array holding food objects->format: {x,y}
-var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade,angle}
+var bugs = []; //array of bug objects->format: {x,y,dx,dy,colour,stepsToFood,food,dead,fade,angle,headx,heady}
 var nextBug;
 var framerate = 20; //milliseconds per frame -> 20 = 50 fps
 var rbugImg, obugImg, bbugImg, foodImg;
@@ -87,7 +87,7 @@ function pause(){
 		ctx.font="30px Georgia";
 		ctx.fillStyle='black';
 		ctx.fillText("Restart",70,300);		
-		ctx.fillText("Quit",250,300);
+		ctx.fillText("Quit",270,300);
 		
 	}
 	else{
@@ -137,7 +137,7 @@ function gameover(){
 	ctx.fillStyle='black';
 	ctx.fillText("Game Over",130,200);
 	ctx.fillText("Restart",70,300);		
-	ctx.fillText("Quit",250,300);
+	ctx.fillText("Quit",270,300);
 	ctx.fillText("Score: "+score ,140,400);
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
@@ -175,7 +175,7 @@ function spawnBug(){
 	else {
 		c = "black";
 	}
-	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1, angle:0});
+	var b = calculateSpeed({x:bX, y:0, dx:0, dy:0 ,colour:c, stepsToFood:0 , food:0, dead:false, fade: 1, angle:0, headx:bX, heady:20});
 	bugs.push(b);
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
@@ -191,6 +191,7 @@ function spawnBug(){
 function drawBugs(){
 	for (var i = bugs.length; i--;) {
 		if (bugs[i].dead){
+			//2000 for millisecond fade
 			bugs[i].fade -= (framerate/2000);
 			if (bugs[i].fade <=0 ){
 				bugs.splice(i,1);
@@ -220,7 +221,7 @@ function drawBugs(){
 		document.getElementById("t3").innerHTML  = bugs.length;*/
 		
 		ctx.translate(bugs[i].x, bugs[i].y);   
-		ctx.rotate(bugs[i].angle - 0.5*Math.PI); 		
+		ctx.rotate(bugs[i].angle); 		
 		ctx.translate(-bugs[i].x, -bugs[i].y); 	
 		ctx.drawImage(img, bugs[i].x, bugs[i].y);
 		ctx.setTransform(1,0,0,1,0,0); 
@@ -294,19 +295,17 @@ function calculateSpeed( bug ){
 	//using similar triangles to get dy and dx
 	var xspeed = speed*(distanceX/distance);
 	var yspeed = speed*(distanceY/distance);
-	var a =  Math.atan2(distanceY, distanceX);
-	/*
-	document.getElementById("t1").innerHTML  = speed;
-	document.getElementById("t2").innerHTML  = distanceX;
-	document.getElementById("t3").innerHTML  = distanceY;
-	document.getElementById("t4").innerHTML  = distance;
-	document.getElementById("t5").innerHTML  = xspeed;
-	document.getElementById("t6").innerHTML  = yspeed;
-	*/
+	var a =  (Math.atan2(distanceY, distanceX)- 0.5*Math.PI);
+	var bodylengthx = (-40*Math.sin(a));
+	var bodylengthy = (40*Math.cos(a));
 	bug.dx = xspeed;
 	bug.dy = yspeed;
+	
+	bug.headx = bug.x + bodylengthx;
+	bug.heady = bug.y + bodylengthy;
+	var bodylength = Math.sqrt(Math.pow(bodylengthx,2)+Math.pow(bodylengthy,2));
 	bug.food = nearestFood;
-	bug.stepsToFood = distance/speed;
+	bug.stepsToFood = (distance-bodylength)/speed;
 	bug.angle = a;
 	
 	return bug;
@@ -324,7 +323,7 @@ function onClick(event){
 	x -= canvas.offsetLeft;
 	y -= canvas.offsetTop;
 	
-	//alert("x:" + x + " y:" + y);
+	
 	
 	if(!isPlaying){
 		//restart button
@@ -332,9 +331,10 @@ function onClick(event){
 			play();
 		}
 		//quit button
-		else if ( (225 < x) && (x < 330) && (260 < y) && (y < 320) ){
+		else if ( (245 < x) && (x < 350) && (260 < y) && (y < 320) ){
 			quit();
 		}
+		//alert("x:" + x + " y:" + y);
 		return;
 	}	
 
