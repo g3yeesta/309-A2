@@ -52,6 +52,7 @@ function play() {
 	document.getElementById("info-bar").style.display = "table";
 	document.getElementById("canvas").style.display = "block";
 	isPlaying = true;
+	document.getElementById("pause").disabled = false;
 	//empty and then fill food arrays with food objects
 	food = [];
 	for (var i = 0; i < 5; i++) { 
@@ -59,7 +60,8 @@ function play() {
 		food.push({x:(Math.random()*380), y:(300+Math.random()*280) });
 	}
 	time =61;
-	countdown();	
+	countdown();
+	
 	bugs = []; 
 	spawnBug();
 
@@ -91,7 +93,7 @@ function pause(){
 		
 	}
 	else{
-		//resume //TODO disable pausing after game over, pause on change tab
+		//resume
 		isPlaying = true;
 		document.getElementById("pause").innerHTML  = "&#10074;&#10074;";
 		timer = setTimeout(function(){countdown()},(1000-(pauseTime-startTime)));
@@ -142,6 +144,7 @@ function gameover(){
 	clearTimeout(timer);
 	clearTimeout(bugTimer);
 	clearTimeout(animateTimer);
+	document.getElementById("pause").disabled = true;
 	isPlaying = false;	
 }
 
@@ -180,8 +183,6 @@ function spawnBug(){
 	
 	bugTimer = setTimeout(function(){spawnBug()},nextBug);
 	bugStartTime = new Date();	
-	
-	//document.getElementById("t6").innerHTML  = nextBug;
 }
 
 /*
@@ -190,18 +191,16 @@ function spawnBug(){
 
 function drawBugs(){
 	for (var i = bugs.length; i--;) {
+		ctx.globalAlpha = 1;
 		if (bugs[i].dead){
 			//2000 for millisecond fade
 			bugs[i].fade -= (framerate/2000);
-			if (bugs[i].fade <=0 ){
+			if (bugs[i].fade <=(framerate/2000) ){
 				bugs.splice(i,1);
 			}
 			else{
 				ctx.globalAlpha = bugs[i].fade;
 			}
-		}
-		else{
-			ctx.globalAlpha = 1;
 		}
 		if (bugs.length <=0 ){
 			continue;
@@ -216,17 +215,11 @@ function drawBugs(){
 		else{
 			img = bbugImg;
 		}
-		/*document.getElementById("t1").innerHTML  = ctx.globalAlpha;
-		document.getElementById("t2").innerHTML  = bugs[i].dead;
-		document.getElementById("t3").innerHTML  = bugs.length;*/
-		
 		ctx.translate(bugs[i].x, bugs[i].y);   
 		ctx.rotate(bugs[i].angle); 		
 		ctx.translate(-bugs[i].x, -bugs[i].y); 	
 		ctx.drawImage(img, bugs[i].x, bugs[i].y);
-		ctx.setTransform(1,0,0,1,0,0); 
-		//ctx.drawImage(img, bugs[i].x,bugs[i].y);
-		
+		ctx.setTransform(1,0,0,1,0,0); 		
 		ctx.globalAlpha = 1;
 	}
 }
@@ -250,8 +243,6 @@ function moveBugs(){
  */
 
 function calculateSpeed( bug ){		
-	//TODO re-adjust based on closest pixels instead of upper leftcorner, re-adjust for rotating bugs as well
-	//Possibly by keeping track of 4 corners after rotating
 	if (bug.dead){
 		return bug;
 	}	
@@ -334,18 +325,15 @@ function onClick(event){
 		else if ( (245 < x) && (x < 350) && (260 < y) && (y < 320) ){
 			quit();
 		}
-		//alert("x:" + x + " y:" + y);
 		return;
 	}	
-
-	//TODO re-adjust for closest pixels and rotating
 	//reverse loop is safer when splicing elements out
 	for (var i = bugs.length; i--;) {
 		if (bugs[i].dead){
 			continue;
 		}
-		else if ((Math.sqrt((bugs[i].x-x)*(bugs[i].x-x) + (bugs[i].y-y)*(bugs[i].y-y)) < 30) || 
-				(Math.sqrt((bugs[i].x+bugs[i].headx-x)*(bugs[i].x+bugs[i].headx-x) + (bugs[i].y+bugs[i].heady-y)*(bugs[i].y+bugs[i].heady-y)) < 30) ){
+		else if ((Math.sqrt((Math.pow((bugs[i].x-x),2) +  Math.pow((bugs[i].y-y),2))) < 30) || 
+				(Math.sqrt((Math.pow((bugs[i].x+bugs[i].headx-x),2) +  Math.pow((bugs[i].y+bugs[i].heady-y),2))) < 30)){
 			if (bugs[i].colour == "orange"){
 				score +=1;
 			}
